@@ -10,7 +10,7 @@ type Message struct {
 	Method  string
 	Uri     string
 	Version string
-	Headers []byte
+	Headers [][]byte
 	Body    []byte
 }
 
@@ -19,13 +19,13 @@ type Message struct {
 func Decode(packet []byte) Message {
 	m := Message{}
 
-	reqLine, _, _, _ := getElements(packet)
+	reqLine, headers, _, _ := getElements(packet)
 	methodB, uriB, versionB, _ := getRequestLineElements(reqLine)
 
 	m.Method = string(methodB)
 	m.Uri = string(uriB)
 	m.Version = string(versionB)
-	m.Version = string(versionB)
+	m.Headers = headers
 	return m
 }
 

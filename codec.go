@@ -3,7 +3,6 @@ package siputility
 import (
 	"bytes"
 	"errors"
-	"fmt"
 )
 
 // Represents a SIP message as defined in rfc 3261, ,section 7
@@ -20,25 +19,27 @@ type Message struct {
 func Decode(packet []byte) Message {
 	m := Message{}
 
-	elements, _ := getElements(packet)
-	fmt.Println(elements[0])
-	methodB, uriB, versionB, _ := getRequestLineElements(elements[0])
+	reqLine, _, _, _ := getElements(packet)
+	methodB, uriB, versionB, _ := getRequestLineElements(reqLine)
 
 	m.Method = string(methodB)
 	m.Uri = string(uriB)
+	m.Version = string(versionB)
 	m.Version = string(versionB)
 	return m
 }
 
 // Returns every element thats is split by CRLF
 //
-func getElements(packet []byte) ([][]byte, error) {
+func getElements(packet []byte) ([]byte, [][]byte, []byte, error) {
 	elements := bytes.SplitAfter(packet, []byte("\r\n"))
 
-	if len(elements) >= 1 {
-		return elements, nil
+	n := len(elements)
+
+	if n >= 1 {
+		return elements[0], elements[1 : n-2], elements[n-1], nil
 	} else {
-		return nil, errors.New("Decode error")
+		return nil, nil, nil, errors.New("Decode error")
 	}
 }
 

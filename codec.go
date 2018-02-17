@@ -10,8 +10,14 @@ type Message struct {
 	Method  string
 	Uri     string
 	Version string
-	Headers [][]byte
+	Headers []Header
 	Body    []byte
+}
+
+// Represents a SIP header as defined in rfc 3261, ,section 7.3
+type Header struct {
+	Name    string
+	Value   string
 }
 
 // Decodes SIP packet to a Message struct
@@ -21,11 +27,10 @@ func Decode(packet []byte) Message {
 
 	reqLine, headers, body, _ := getElements(packet)
 	methodB, uriB, versionB, _ := getRequestLineElements(reqLine)
-
 	m.Method = string(methodB)
 	m.Uri = string(uriB)
 	m.Version = string(versionB)
-	m.Headers = headers
+	m.Headers = getHeaders(headers)
 	m.Body = body
 	return m
 }
@@ -57,4 +62,16 @@ func getRequestLineElements(binary []byte) ([]byte, []byte, []byte, error) {
 	} else {
 		return requestLine[0], requestLine[1], requestLine[2], nil
 	}
+}
+
+func getHeaders(headersB [][]byte) []Header{
+	headers := []Header{}
+
+	for _, hB := range headersB{
+		elements := bytes.Split(hB, []byte(":"))
+		h := Header{Name : string(elements[0]), Value : string(elements[1])}
+		headers = append(headers, h)
+	}
+
+	return headers
 }

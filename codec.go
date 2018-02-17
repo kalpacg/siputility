@@ -19,13 +19,14 @@ type Message struct {
 func Decode(packet []byte) Message {
 	m := Message{}
 
-	reqLine, headers, _, _ := getElements(packet)
+	reqLine, headers, body, _ := getElements(packet)
 	methodB, uriB, versionB, _ := getRequestLineElements(reqLine)
 
 	m.Method = string(methodB)
 	m.Uri = string(uriB)
 	m.Version = string(versionB)
 	m.Headers = headers
+	m.Body = body
 	return m
 }
 

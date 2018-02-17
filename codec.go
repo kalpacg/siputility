@@ -7,9 +7,27 @@ import (
 )
 
 // Represents a SIP message as defined in rfc 3261, ,section 7
-type message struct {
-	header byte
-	body   byte
+type Message struct {
+	Method  string
+	Uri     string
+	Version string
+	Headers []byte
+	Body    []byte
+}
+
+// Decodes SIP packet to a Message struct
+//
+func Decode(packet []byte) Message {
+	m := Message{}
+
+	elements, _ := getElements(packet)
+	fmt.Println(elements[0])
+	methodB, uriB, versionB, _ := getRequestLineElements(elements[0])
+
+	m.Method = string(methodB)
+	m.Uri = string(uriB)
+	m.Version = string(versionB)
+	return m
 }
 
 // Returns every element thats is split by CRLF

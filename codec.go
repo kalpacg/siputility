@@ -3,6 +3,7 @@ package siputility
 import (
 	"bytes"
 	"errors"
+	"fmt"
 )
 
 // Represents a SIP message as defined in rfc 3261, ,section 7
@@ -16,8 +17,8 @@ type Message struct {
 
 // Represents a SIP header as defined in rfc 3261, ,section 7.3
 type Header struct {
-	Name    string
-	Value   string
+	Name  string
+	Value string
 }
 
 // Decodes SIP packet to a Message struct
@@ -73,8 +74,11 @@ func getHeaders(headersB [][]byte) []Header {
 	headers := []Header{}
 
 	for _, hB := range headersB {
-		elements := bytes.Split(hB, []byte(":"))
-		h := Header{Name: string(elements[0]), Value: string(elements[1])}
+		elems := bytes.SplitAfterN(hB, []byte(":"), 2)
+		fmt.Println(elems)
+		fmt.Println(string(elems[1]))
+
+		h := Header{Name: string(elems[0]), Value: string(elems[1])}
 		headers = append(headers, h)
 	}
 

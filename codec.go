@@ -64,12 +64,17 @@ func getRequestLineElements(binary []byte) ([]byte, []byte, []byte, error) {
 	}
 }
 
-func getHeaders(headersB [][]byte) []Header{
+// ABNF notation for SIP header is as follows. See rfc 3261, section 7.3
+// header  =  "header-name" HCOLON header-value *(COMMA header-value)
+// field-name: field-value
+// field-name: field-value *(;parameter-name=parameter-value)
+//
+func getHeaders(headersB [][]byte) []Header {
 	headers := []Header{}
 
-	for _, hB := range headersB{
+	for _, hB := range headersB {
 		elements := bytes.Split(hB, []byte(":"))
-		h := Header{Name : string(elements[0]), Value : string(elements[1])}
+		h := Header{Name: string(elements[0]), Value: string(elements[1])}
 		headers = append(headers, h)
 	}
 

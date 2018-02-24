@@ -3,7 +3,6 @@ package siputility
 import (
 	"bytes"
 	"errors"
-	"fmt"
 )
 
 // Represents a SIP message as defined in rfc 3261, ,section 7
@@ -75,8 +74,6 @@ func getHeaders(headersB [][]byte) []Header {
 
 	for _, hB := range headersB {
 		elems := bytes.SplitAfterN(hB, []byte(":"), 2)
-		fmt.Println(elems)
-		fmt.Println(string(elems[1]))
 
 		h := Header{Name: string(elems[0]), Value: string(elems[1])}
 		headers = append(headers, h)

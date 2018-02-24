@@ -5,6 +5,12 @@ import (
 	"errors"
 )
 
+const (
+	CRLF  = "\r\n"
+	SP    = " "
+	COLON = ":"
+)
+
 // Represents a SIP message as defined in rfc 3261, ,section 7
 type Message struct {
 	Method  string
@@ -39,10 +45,6 @@ func Decode(packet []byte) Message {
 //
 func Encode(method, uri, version string, headers []Header, body []byte) []byte {
 
-	CRLF := []byte("\r\n")
-	SP := []byte(" ")
-	COLON := []byte(":")
-
 	methodB := []byte(method)
 	uriB := []byte(uri)
 	versionB := []byte(version)
@@ -56,7 +58,8 @@ func Encode(method, uri, version string, headers []Header, body []byte) []byte {
 		headersB = append(headersB, CRLF...)
 	}
 
-	stream := [][]byte{methodB, SP, uriB, SP, versionB, CRLF, headersB, CRLF, body}
+	stream := [][]byte{methodB, []byte(SP), uriB, []byte(SP), versionB, []byte(CRLF),
+		headersB, []byte(CRLF), body}
 
 	return Concat(stream)
 }

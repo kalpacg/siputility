@@ -73,7 +73,7 @@ func getHeaders(headersB [][]byte) []Header {
 	headers := []Header{}
 
 	for _, hB := range headersB {
-		elems := bytes.SplitAfterN(hB, []byte(":"), 2)
+		elems := bytes.SplitN(hB, []byte(":"), 2)
 
 		h := Header{Name: string(elems[0]), Value: string(elems[1])}
 		headers = append(headers, h)

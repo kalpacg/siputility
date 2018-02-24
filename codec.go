@@ -69,6 +69,20 @@ func Encode(method, uri, version string, headers []Header, body []byte) []byte {
 	return packet
 }
 
+// Concatenates array of byte slices into one byte slice
+func Concat(elements [][]byte) []byte {
+
+	var stream []byte
+
+	for _, element := range elements {
+		for _, b := range element {
+			stream = append(stream, b)
+		}
+	}
+
+	return stream
+}
+
 // Returns every element thats is split by CRLF
 //
 func getElements(packet []byte) ([]byte, [][]byte, []byte, error) {

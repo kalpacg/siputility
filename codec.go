@@ -81,3 +81,12 @@ func getHeaders(headersB [][]byte) []Header {
 
 	return headers
 }
+
+func GetHeaderValue(headers []Header, name string) (string, error) {
+	for _, h := range headers {
+		if h.Name == name {
+			return h.Value, nil
+		}
+	}
+	return "", errors.New("Header value not found")
+}

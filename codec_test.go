@@ -1,8 +1,18 @@
 package siputility
 
 import (
+	"bytes"
 	"testing"
 )
+
+func TestConcatenation(t *testing.T) {
+	stream := [][]byte{[]byte{1, 10}, []byte{2, 9}, []byte{3, 8, 7}}
+	result := Concat(stream)
+
+	if !bytes.Equal(result, []byte{1, 10, 2, 9, 3, 8, 7}) {
+		t.Errorf("stream = %v, result = %v ", stream, result)
+	}
+}
 
 func TestDecodeSipCancel(t *testing.T) {
 

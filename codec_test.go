@@ -37,7 +37,18 @@ func TestGetHeaderElements(t *testing.T) {
 	headers := message.Headers
 	value, _ := GetHeaderValue(headers, "User-Agent")
 	t.Logf("result ==> %v", value)
+}
 
+func TestEncodeSipMessage(t *testing.T) {
+
+	method := "REGISTER"
+	uri := "sip:192.168.12.67"
+	version := "SIP/2.0"
+	headers := []Header{}
+	body := []byte{}
+
+	packet := Encode(method, uri, version, headers, body)
+	t.Logf("result ==> %v", string(packet))
 }
 
 // Decodes SIP CANCEL message to a Message{} struct

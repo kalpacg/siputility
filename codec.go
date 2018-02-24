@@ -35,6 +35,40 @@ func Decode(packet []byte) Message {
 	return m
 }
 
+// Encode a Message struct to SIP packet
+//
+func Encode(method, uri, version string, headers []Header, body []byte) []byte {
+	var packet []byte
+
+	CRLF := []byte("\r\n")
+	SP := []byte(" ")
+	COLON := []byte(":")
+
+	methodB := []byte(method)
+	uriB := []byte(uri)
+	versionB := []byte(version)
+
+	packet = append(packet, methodB...)
+	packet = append(packet, SP...)
+	packet = append(packet, uriB...)
+	packet = append(packet, SP...)
+	packet = append(packet, versionB...)
+	packet = append(packet, SP...)
+	packet = append(packet, CRLF...)
+
+	for _, h := range headers {
+		packet = append(packet, h.Name...)
+		packet = append(packet, COLON...)
+		packet = append(packet, h.Value...)
+		packet = append(packet, CRLF...)
+	}
+
+	packet = append(packet, CRLF...)
+	packet = append(packet, body...)
+
+	return packet
+}
+
 // Returns every element thats is split by CRLF
 //
 func getElements(packet []byte) ([]byte, [][]byte, []byte, error) {
